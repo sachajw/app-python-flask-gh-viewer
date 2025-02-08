@@ -1,0 +1,48 @@
+%YAML 1.2
+# yaml-language-server: $schema=https://json.schemastore.org/pre-commit-config.json
+---
+default_install_hook_types:
+  - pre-commit
+  - commit-msg
+  - post-commit
+
+default_stages:
+  - pre-commit
+
+fail_fast: true
+
+# Default config
+repos:
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v5.0.0 #https://pre-commit.com/
+    hooks:
+      - id: end-of-file-fixer
+      - id: trailing-whitespace
+        args: [--markdown-linebreak-ext=md]
+      - id: check-merge-conflict
+  # default config end
+
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: v0.7.2 # Ruff version | Extreme linting and formatting for Python
+    hooks:
+      # Run the linter.
+      - id: ruff
+        args: [--fix]
+      # Run the formatter.
+      - id: ruff-format
+
+  # DevSecOps with GitGuardian Shield
+  # Add your api key to your .env file or your .bashrc or .zshrc file | GITGUARDIAN_API_KEY=
+  - repo: https://github.com/gitguardian/ggshield
+    rev: v1.33.0 # https://docs.gitguardian.com/ggshield-docs/integrations/git-hooks/pre-commit
+    hooks:
+      - id: ggshield
+        language_version: python3
+        stages: [pre-commit]
+
+  # Hadolint your Dockerfile
+  - repo: https://github.com/AleksaC/hadolint-py
+    rev: v2.12.1b3
+    hooks:
+      - id: hadolint
+        args: [--ignore, DL3025, --ignore, DL3018]
