@@ -11,6 +11,25 @@ import logging
 import requests
 from flask_caching import Cache
 
+import sentry_sdk
+from flask import Flask
+
+sentry_sdk.init(
+    dsn="https://fbf7c460ae3a45d232f2e640b0aa8a1c@o4508896598753280.ingest.de.sentry.io/4508896998457424",
+    # Add data like request headers and IP for users,
+    # see https://docs.sentry.io/platforms/python/data-management/data-collected/ for more info
+    send_default_pii=True,
+    # Set traces_sample_rate to 1.0 to capture 100%
+    # of transactions for tracing.
+    traces_sample_rate=1.0,
+    _experiments={
+        # Set continuous_profiling_auto_start to True
+        # to automatically start the profiler on when
+        # possible.
+        "continuous_profiling_auto_start": True,
+    },
+)
+
 app = Flask(__name__)
 
 # Set up cache configuration (in-memory cache for simplicity)
